@@ -36,3 +36,34 @@ class Snippet(models.Model):
                                 full=True, **options)
         self.highlighted = highlight(self.code, lexer, formatter)
         super().save(*args, **kwargs)
+        
+        
+import datetime
+from django_fsm import FSMField, transition
+from django_fsm import can_proceed
+from django.shortcuts import get_object_or_404
+
+class BlogPost(models.Model):
+    state = FSMField(default='new', protected=True)
+
+    def can_publish(instance):
+        # No publishing after 17 hours
+        if datetime.datetime.now().hour > 17:
+            return False
+        print(True)
+        return True
+
+    def can_destroy(self):
+        return self.is_under_investigation()
+
+    @transition(field=state, source='new', target='published', conditions=[can_publish], on_error="failed")
+    def publish(self):
+        """
+        Side effects galore
+        """
+
+    @transition(field=state, source='*', target='destroyed', conditions=[can_destroy])
+    def destroy(self):
+        """
+        Side effects galore
+        """

@@ -56,6 +56,7 @@ from snippets import views
 router = DefaultRouter()
 router.register(r'snippets', views.SnippetViewSet,basename="snippet")
 router.register(r'users', views.UserViewSet,basename="user")
+router.register(r'blogpost', views.BlogPostViewSet, basename="blogpost")
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [

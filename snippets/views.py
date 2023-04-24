@@ -201,9 +201,11 @@
 
 
 from django.contrib.auth.models import User
-from snippets.models import Snippet
+from django.shortcuts import get_object_or_404
+from django_fsm import can_proceed
+from snippets.models import BlogPost, Snippet
 from snippets.permissions import IsOwnerOrReadOnly, IsSuperuserOrReadOnly
-from snippets.serializers import SnippetSerializer, UserSerializer
+from snippets.serializers import BlogPostSerializer, SnippetSerializer, UserSerializer
 from rest_framework import generics
 from rest_framework import permissions
 
@@ -271,8 +273,8 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsSuperuserOrReadOnly]
-    
-    
+
+
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -297,3 +299,26 @@ class SnippetViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+
+class BlogPostViewSet(viewsets.ModelViewSet):
+    queryset = BlogPost.objects.all()
+    serializer_class = BlogPostSerializer
+    
+    def perform_transition(self, obj, transition_method):
+        try:
+            if can_proceed(transition_method, obj):
+                transition_method()
+                obj.save()
+                return Response({'status': 'success', 'state': obj.state})
+            else:
+                return Response({'status': 'failure', 'error': 'Cannot perform transition'})
+        except Exception as e:
+            return Response({'status': 'failure', 'error': str(e)})
+        
+    @action(detail=True, methods=['post'])
+    def publish(self, request, pk):
+        print('d publish')
+        blog_post = get_object_or_404(BlogPost, pk=pk)
+        return self.perform_transition(blog_post, blog_post.publish)
+    

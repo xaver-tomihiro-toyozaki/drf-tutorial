@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
+from snippets.models import BlogPost, Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
 
 
 # class SnippetSerializer(serializers.Serializer):
@@ -44,3 +44,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ['url', 'id', 'username', 'snippets']
     
+class BlogPostSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = BlogPost
+        fields = ['url', 'id', 'state']
