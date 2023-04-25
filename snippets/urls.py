@@ -57,8 +57,22 @@ router = DefaultRouter()
 router.register(r'snippets', views.SnippetViewSet,basename="snippet")
 router.register(r'users', views.UserViewSet,basename="user")
 router.register(r'blogpost', views.BlogPostViewSet, basename="blogpost")
+router.register(r'issue', views.IssueViewSet, basename='issue')
+
+workflow_list = views.WorkflowViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+
+workflow_detail = views.WorkflowViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'delete': 'destroy'
+})
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
     path('', include(router.urls)),
+    path('issue/<int:issue_pk>/workflow/', workflow_list, name='workflow-list'),
+    path('issue/<int:issue_pk>/workflow/<int:pk>/', workflow_detail, name='workflow-detail'),
 ]

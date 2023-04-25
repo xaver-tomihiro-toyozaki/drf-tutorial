@@ -203,9 +203,9 @@
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django_fsm import can_proceed
-from snippets.models import BlogPost, Snippet
+from snippets.models import BlogPost, Issue, Snippet, Workflow
 from snippets.permissions import IsOwnerOrReadOnly, IsSuperuserOrReadOnly
-from snippets.serializers import BlogPostSerializer, SnippetSerializer, UserSerializer
+from snippets.serializers import BlogPostSerializer, IssueSerializer, SnippetSerializer, UserSerializer, WorkflowSerializer
 from rest_framework import generics
 from rest_framework import permissions
 
@@ -318,7 +318,39 @@ class BlogPostViewSet(viewsets.ModelViewSet):
         
     @action(detail=True, methods=['post'])
     def publish(self, request, pk):
-        print('d publish')
         blog_post = get_object_or_404(BlogPost, pk=pk)
         return self.perform_transition(blog_post, blog_post.publish)
     
+
+class IssueViewSet(viewsets.ModelViewSet):
+    queryset = Issue.objects.all()
+    serializer_class = IssueSerializer
+    
+    def perform_transition(self, obj, transition_method):
+        try:
+            if can_proceed(transition_method, check_conditions=False):
+                transition_method()
+                obj.save()
+                return Response({'status': 'success', 'state': obj.workflow_state})
+            else:
+                return Response({'status': 'failure', 'error': can_proceed(transition_method, check_conditions=False)})
+        except Exception as e:
+            return Response({'status': 'failure', 'error': str(e)})
+    
+    @action(detail=True, methods=['post'])
+    def approve(self, request, pk):
+        issue = get_object_or_404(Issue, pk=pk)
+        return self.perform_transition(issue, issue.approve)
+    
+
+class WorkflowViewSet(viewsets.ModelViewSet):
+    serializer_class = WorkflowSerializer
+    
+    def get_queryset(self):
+        issue = Issue.objects.get(pk=self.kwargs['issue_pk'])
+        return issue.workflow_set.all()
+    
+    def perform_create(self, serializer):
+        issue = Issue.objects.get(pk=int(self.kwargs['issue_pk']))
+        serializer.save(issue=issue)
+        
