@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from snippets.models import BlogPost, Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
+from snippets.models import BlogPost, Issue, Snippet, LANGUAGE_CHOICES, STYLE_CHOICES, Workflow
 
 
 # class SnippetSerializer(serializers.Serializer):
@@ -48,3 +48,15 @@ class BlogPostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = BlogPost
         fields = ['url', 'id', 'state']
+
+
+class IssueSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Issue
+        fields = ['url', 'id', 'title', 'workflow_state', 'approved']
+        
+class WorkflowSerializer(serializers.ModelSerializer):
+    issue = serializers.ReadOnlyField(source='issue.id')
+    class Meta:
+        model = Workflow
+        fields = ['issue', 'step', 'reviewer', 'text', 'approved', 'approved_at']
