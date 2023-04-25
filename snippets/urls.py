@@ -53,26 +53,50 @@ from rest_framework.routers import DefaultRouter
 from snippets import views
 
 # Create a router and register our viewsets with it.
+
+
 router = DefaultRouter()
 router.register(r'snippets', views.SnippetViewSet,basename="snippet")
 router.register(r'users', views.UserViewSet,basename="user")
 router.register(r'blogpost', views.BlogPostViewSet, basename="blogpost")
-router.register(r'issue', views.IssueViewSet, basename='issue')
 
-workflow_list = views.WorkflowViewSet.as_view({
-    'get': 'list',
-    'post': 'create'
-})
+# Issue Type A ここから
+# router.register(r'issue', views.IssueViewSet, basename='issue')
 
-workflow_detail = views.WorkflowViewSet.as_view({
-    'get': 'retrieve',
-    'put': 'update',
-    'delete': 'destroy'
-})
+# workflow_list = views.WorkflowViewSet.as_view({
+#     'get': 'list',
+#     'post': 'create'
+# })
+
+# workflow_detail = views.WorkflowViewSet.as_view({
+#     'get': 'retrieve',
+#     'put': 'update',
+#     'delete': 'destroy'
+# })
 
 # The API URLs are now determined automatically by the router.
+# urlpatterns = [
+#     path('', include(router.urls)),
+#     path('issue/<int:issue_pk>/workflow/', workflow_list, name='workflow-list'),
+#     path('issue/<int:issue_pk>/workflow/<int:pk>/', workflow_detail, name='workflow-detail'),
+# ]
+# Issue Type A ここまで
+
+router.register(r'issue', views.IssueViewSet, basename='issue')
+router.register(r'issue/(?P<issue_pk>[^/.]+)/workflow', views.WorkflowViewSet, basename='workflow')
+
+# workflow_list = views.WorkflowViewSet.as_view({
+#     'get': 'list',
+#     'post': 'create'
+# })
+# workflow_detail = views.WorkflowViewSet.as_view({
+#     'get': 'retrieve',
+#     'put': 'update',
+#     'delete': 'destroy'
+# })
+
 urlpatterns = [
     path('', include(router.urls)),
-    path('issue/<int:issue_pk>/workflow/', workflow_list, name='workflow-list'),
-    path('issue/<int:issue_pk>/workflow/<int:pk>/', workflow_detail, name='workflow-detail'),
+    # path('issue/<int:issue_pk>/workflow/', workflow_list, name='workflow-list'),
+    # path('issue/<int:issue_pk>/workflow/<int:pk>/', workflow_detail, name='workflow_detail'),
 ]

@@ -49,14 +49,27 @@ class BlogPostSerializer(serializers.HyperlinkedModelSerializer):
         model = BlogPost
         fields = ['url', 'id', 'state']
 
+# Issue Type A　ここから
+# class IssueSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = Issue
+#         fields = ['url', 'id', 'title', 'workflow_state', 'approved']
+        
+# class WorkflowSerializer(serializers.ModelSerializer):
+#     issue = serializers.ReadOnlyField(source='issue.id')
+#     class Meta:
+#         model = Workflow
+#         fields = ['issue', 'step', 'reviewer', 'text', 'approved', 'approved_at']
+# Issue Type A　ここまで
 
+# Issue Type B
 class IssueSerializer(serializers.HyperlinkedModelSerializer):
+    issuer = serializers.ReadOnlyField(source='issuer.username')
     class Meta:
         model = Issue
-        fields = ['url', 'id', 'title', 'workflow_state', 'approved']
-        
+        fields = ['url', 'id', 'title', 'issuer']
+
 class WorkflowSerializer(serializers.ModelSerializer):
-    issue = serializers.ReadOnlyField(source='issue.id')
     class Meta:
         model = Workflow
-        fields = ['issue', 'step', 'reviewer', 'text', 'approved', 'approved_at']
+        fields = ['id', 'stage', 'approver', 'state', 'comment', 'approved_at']

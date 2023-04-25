@@ -322,35 +322,72 @@ class BlogPostViewSet(viewsets.ModelViewSet):
         return self.perform_transition(blog_post, blog_post.publish)
     
 
+# Issue Type A　ここから
+# class IssueViewSet(viewsets.ModelViewSet):
+#     queryset = Issue.objects.all()
+#     serializer_class = IssueSerializer
+    
+#     def perform_transition(self, obj, transition_method):
+#         try:
+#             if can_proceed(transition_method, check_conditions=False):
+#                 transition_method()
+#                 obj.save()
+#                 return Response({'status': 'success', 'state': obj.workflow_state})
+#             else:
+#                 return Response({'status': 'failure', 'error': can_proceed(transition_method, check_conditions=False)})
+#         except Exception as e:
+#             return Response({'status': 'failure', 'error': str(e)})
+    
+#     @action(detail=True, methods=['post'])
+#     def approve(self, request, pk):
+#         issue = get_object_or_404(Issue, pk=pk)
+#         return self.perform_transition(issue, issue.approve)
+    
+
+# class WorkflowViewSet(viewsets.ModelViewSet):
+#     serializer_class = WorkflowSerializer
+    
+#     def get_queryset(self):
+#         issue = Issue.objects.get(pk=self.kwargs['issue_pk'])
+#         return issue.workflow_set.all()
+    
+#     def perform_create(self, serializer):
+#         issue = Issue.objects.get(pk=int(self.kwargs['issue_pk']))
+#         serializer.save(issue=issue)
+        
+# Issue Type A ここまで
+
+
 class IssueViewSet(viewsets.ModelViewSet):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
     
-    def perform_transition(self, obj, transition_method):
-        try:
-            if can_proceed(transition_method, check_conditions=False):
-                transition_method()
-                obj.save()
-                return Response({'status': 'success', 'state': obj.workflow_state})
-            else:
-                return Response({'status': 'failure', 'error': can_proceed(transition_method, check_conditions=False)})
-        except Exception as e:
-            return Response({'status': 'failure', 'error': str(e)})
-    
-    @action(detail=True, methods=['post'])
-    def approve(self, request, pk):
-        issue = get_object_or_404(Issue, pk=pk)
-        return self.perform_transition(issue, issue.approve)
-    
+    def perform_create(self, serializer):
+        serializer.save(issuer=self.request.user)
 
 class WorkflowViewSet(viewsets.ModelViewSet):
     serializer_class = WorkflowSerializer
+    
+    def perform_transition(self, obj, transition_method):
+        try:
+            if can_proceed(transition_method, obj):
+                transition_method()
+                obj.save()
+                return Response({'status': 'success', 'state': obj.state})
+            else:
+                return Response({'status': 'failure', 'error': 'Cannot perform transition'})
+        except Exception as e:
+            return Response({'status': 'failure', 'error': str(e)})
+        
+    @action(detail=True, methods=['post'])
+    def approve(self, request, issue_pk, pk):
+        workflow = get_object_or_404(Workflow, pk=pk)
+        return self.perform_transition(workflow, workflow.approve)
     
     def get_queryset(self):
         issue = Issue.objects.get(pk=self.kwargs['issue_pk'])
         return issue.workflow_set.all()
     
     def perform_create(self, serializer):
-        issue = Issue.objects.get(pk=int(self.kwargs['issue_pk']))
+        issue = Issue.objects.get(pk=self.kwargs['issue_pk'])
         serializer.save(issue=issue)
-        
