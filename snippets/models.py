@@ -158,15 +158,18 @@ class Workflow(models.Model):
     def can_review(self):
         return True
     
-    @transition(field=state, source=REVIEWING, target=APPROVED, conditions=[can_review])
+    def same_approver(self, user):
+        return user == self.approver
+    
+    @transition(field=state, source=REVIEWING, target=APPROVED, conditions=[can_review], permission=same_approver)
     def approve(self):
         pass
 
-    @transition(field=state, source=REVIEWING, target=REJECTED, conditions=[can_review])
+    @transition(field=state, source=REVIEWING, target=REJECTED, conditions=[can_review], permission=same_approver)
     def reject(self):
         pass
 
-    @transition(field=state, source=[APPROVED, REJECTED], target=REVIEWING)
+    @transition(field=state, source=[APPROVED, REJECTED], target=REVIEWING, permission=same_approver)
     def review(self):
         pass
 

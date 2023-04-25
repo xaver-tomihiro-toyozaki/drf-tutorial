@@ -202,7 +202,7 @@
 
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-from django_fsm import can_proceed
+from django_fsm import can_proceed, has_transition_perm
 from snippets.models import BlogPost, Issue, Snippet, Workflow
 from snippets.permissions import IsOwnerOrReadOnly, IsSuperuserOrReadOnly
 from snippets.serializers import BlogPostSerializer, IssueSerializer, SnippetSerializer, UserSerializer, WorkflowSerializer
@@ -370,6 +370,9 @@ class WorkflowViewSet(viewsets.ModelViewSet):
     
     def perform_transition(self, obj, transition_method):
         try:
+            if not has_transition_perm(transition_method, self.request.user):
+                return Response({'status': 'failure', 'error': 'have no permission'})
+                
             if can_proceed(transition_method, obj):
                 transition_method()
                 obj.save()
@@ -383,6 +386,16 @@ class WorkflowViewSet(viewsets.ModelViewSet):
     def approve(self, request, issue_pk, pk):
         workflow = get_object_or_404(Workflow, pk=pk)
         return self.perform_transition(workflow, workflow.approve)
+    
+    @action(detail=True, methods=['post'])
+    def review(self, request, issue_pk, pk):
+        workflow = get_object_or_404(Workflow, pk=pk)
+        return self.perform_transition(workflow, workflow.review)
+    
+    @action(detail=True, methods=['post'])
+    def reject(self, request, issue_pk, pk):
+        workflow = get_object_or_404(Workflow, pk=pk)
+        return self.perform_transition(workflow, workflow.reject)
     
     def get_queryset(self):
         issue = Issue.objects.get(pk=self.kwargs['issue_pk'])
