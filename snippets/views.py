@@ -370,15 +370,14 @@ class WorkflowViewSet(viewsets.ModelViewSet):
     
     def perform_transition(self, obj, transition_method):
         try:
-            if not has_transition_perm(transition_method, self.request.user):
-                return Response({'status': 'failure', 'error': 'have no permission'})
-                
-            if can_proceed(transition_method, obj):
-                transition_method()
-                obj.save()
-                return Response({'status': 'success', 'state': obj.state})
-            else:
+            if not can_proceed(transition_method, obj):
                 return Response({'status': 'failure', 'error': 'Cannot perform transition'})
+            if not has_transition_perm(transition_method, self.request.user):
+                return Response({'status': 'failure', 'error': 'don\'t have the permission'})
+                
+            transition_method()
+            obj.save()
+            return Response({'status': 'success', 'state': obj.state})
         except Exception as e:
             return Response({'status': 'failure', 'error': str(e)})
         
