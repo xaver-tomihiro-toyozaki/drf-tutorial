@@ -128,7 +128,7 @@ class Issue(models.Model):
     title = models.CharField(max_length=255)
     issuer = models.ForeignKey('auth.User', related_name="issuer", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
 class IssueComment():
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
     comment = models.TextField()
@@ -172,5 +172,24 @@ class Workflow(models.Model):
     @transition(field=state, source=[APPROVED, REJECTED], target=REVIEWING, permission=same_approver)
     def review(self):
         pass
+
+
+
+
+# viewflow quickstart
+from django.db import models
+from viewflow import jsonstore
+from viewflow.workflow.models import Process
+
+
+class HelloWorldProcess(Process):
+    text = jsonstore.CharField(max_length=150)
+    approved = jsonstore.BooleanField(default=False)
+
+    class Meta:
+        proxy = True
+
+    
+
 
 

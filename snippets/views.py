@@ -320,7 +320,6 @@ class BlogPostViewSet(viewsets.ModelViewSet):
     def publish(self, request, pk):
         blog_post = get_object_or_404(BlogPost, pk=pk)
         return self.perform_transition(blog_post, blog_post.publish)
-    
 
 # Issue Type A　ここから
 # class IssueViewSet(viewsets.ModelViewSet):
@@ -403,3 +402,14 @@ class WorkflowViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         issue = Issue.objects.get(pk=self.kwargs['issue_pk'])
         serializer.save(issue=issue)
+        
+
+
+# from snippets.flows import HelloWorldFlow
+# from viewflow.workflow.flow import FlowViewset
+# from snippets.serializers import HelloWorldFlowSerializer
+
+# # viewflow quickstart
+# class HelloWorldFlowViewSet(FlowViewset):
+#     queryset = HelloWorldFlow
+#     serializer_class = HelloWorldFlowSerializer

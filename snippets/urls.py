@@ -95,8 +95,24 @@ router.register(r'issue/(?P<issue_pk>[^/.]+)/workflow', views.WorkflowViewSet, b
 #     'delete': 'destroy'
 # })
 
+from django.urls import path
+from viewflow.contrib.auth import AuthViewset
+from viewflow.urls import Application, Site, ModelViewset
+from viewflow.workflow.flow import FlowAppViewset
+from snippets.flows import HelloWorldFlow
+
+site = Site(title="ACME Corp", viewsets=[
+    Application(
+        title='Sample App', icon='people', app_name='sample', viewsets=[
+            FlowAppViewset(HelloWorldFlow, icon="assignment"),
+        ]
+    ),
+])
+# router.register(r'hello', views.HelloWorldFlowViewSet, basename='hello')
+
 urlpatterns = [
-    path('', include(router.urls)),
+    # path('', include(router.urls)),
+    path('', site.urls)
     # path('issue/<int:issue_pk>/workflow/', workflow_list, name='workflow-list'),
     # path('issue/<int:issue_pk>/workflow/<int:pk>/', workflow_detail, name='workflow_detail'),
 ]

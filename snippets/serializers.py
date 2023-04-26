@@ -32,18 +32,18 @@ from snippets.models import BlogPost, Issue, Snippet, LANGUAGE_CHOICES, STYLE_CH
 class SnippetSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     highlight = serializers.HyperlinkedIdentityField(view_name='snippet-highlight', format='html')
-    
+
     class Meta:
         model = Snippet
         fields = ['url', 'id', 'highlight', 'title', 'code', 'linenos', 'language', 'style', 'owner']
-        
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
-    
+
     class Meta:
         model = User
         fields = ['url', 'id', 'username', 'snippets']
-    
+
 class BlogPostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = BlogPost
@@ -54,7 +54,7 @@ class BlogPostSerializer(serializers.HyperlinkedModelSerializer):
 #     class Meta:
 #         model = Issue
 #         fields = ['url', 'id', 'title', 'workflow_state', 'approved']
-        
+
 # class WorkflowSerializer(serializers.ModelSerializer):
 #     issue = serializers.ReadOnlyField(source='issue.id')
 #     class Meta:
@@ -73,3 +73,14 @@ class WorkflowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workflow
         fields = ['id', 'stage', 'approver', 'state', 'comment', 'approved_at']
+
+
+
+
+# viewflow quickstart
+from snippets.flows import HelloWorldFlow
+
+class HelloWorldFlowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HelloWorldFlow
+        fields = '__all__'

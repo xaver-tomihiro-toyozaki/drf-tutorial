@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'snippets',
     'django_fsm',
+    'viewflow',
+    'viewflow.workflow'
 ]
 
 MIDDLEWARE = [
