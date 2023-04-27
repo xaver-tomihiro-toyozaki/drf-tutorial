@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from snippets.models import BlogPost, Issue, Snippet, LANGUAGE_CHOICES, STYLE_CHOICES, Workflow
+from snippets.models import BlogPost, Issue, IssueWorkflow, IssueWorkflowStage, IssueWorkflowStageApproval, Snippet, LANGUAGE_CHOICES, STYLE_CHOICES, Workflow
 
 
 # class SnippetSerializer(serializers.Serializer):
@@ -73,3 +73,27 @@ class WorkflowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workflow
         fields = ['id', 'stage', 'approver', 'state', 'comment', 'approved_at']
+
+
+# Workflow Type C(込み込みのやつ)
+class IssueWorkflowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IssueWorkflow
+        fields = ['id', 'issue', 'issue_workflow_type']
+        
+class IssueWorkflowStageSerializer(serializers.ModelSerializer):
+    approved = serializers.SerializerMethodField()
+    class Meta:
+        model = IssueWorkflowStage
+        fields = ['id', 'issue_workflow', 'issue_workflow_stage_type', 'previous_stage', 'approved']
+        
+    def get_approved(self, obj):
+        return obj.is_approved()
+        
+
+class IssueWorkflowStageApprovalSerializer(serializers.ModelSerializer):
+    state = serializers.ReadOnlyField()
+    approved_at = serializers.ReadOnlyField()
+    class Meta:
+        model = IssueWorkflowStageApproval
+        fields = ['id', 'issue_workflow_stage', 'approver', 'state', 'comment', 'approved_at']

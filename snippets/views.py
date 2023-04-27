@@ -203,9 +203,9 @@
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django_fsm import can_proceed, has_transition_perm
-from snippets.models import BlogPost, Issue, Snippet, Workflow
+from snippets.models import BlogPost, Issue, IssueWorkflow, IssueWorkflowStage, IssueWorkflowStageApproval, Snippet, Workflow
 from snippets.permissions import IsOwnerOrReadOnly, IsSuperuserOrReadOnly
-from snippets.serializers import BlogPostSerializer, IssueSerializer, SnippetSerializer, UserSerializer, WorkflowSerializer
+from snippets.serializers import BlogPostSerializer, IssueSerializer, IssueWorkflowSerializer, IssueWorkflowStageApprovalSerializer, IssueWorkflowStageSerializer, SnippetSerializer, UserSerializer, WorkflowSerializer
 from rest_framework import generics
 from rest_framework import permissions
 
@@ -403,3 +403,49 @@ class WorkflowViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         issue = Issue.objects.get(pk=self.kwargs['issue_pk'])
         serializer.save(issue=issue)
+        
+
+
+
+# Workflow Type C(込み込みのやつ)
+class IssueWorkflowViewSet(viewsets.ModelViewSet):
+    queryset = IssueWorkflow.objects.all()
+    serializer_class = IssueWorkflowSerializer
+
+
+class IssueWorkflowStageViewSet(viewsets.ModelViewSet):
+    queryset = IssueWorkflowStage.objects.all()
+    serializer_class = IssueWorkflowStageSerializer
+
+
+class IssueWorkflowStageApprovalViewSet(viewsets.ModelViewSet):
+    queryset = IssueWorkflowStageApproval.objects.all()
+    serializer_class = IssueWorkflowStageApprovalSerializer
+    
+    def perform_transition(self, obj, transition_method):
+        try:
+            if not can_proceed(transition_method, obj):
+                return Response({'status': 'failure', 'error': 'Cannot perform transition'})
+            if not has_transition_perm(transition_method, self.request.user):
+                return Response({'status': 'failure', 'error': 'don\'t have the permission'})
+                
+            transition_method()
+            obj.save()
+            return Response({'status': 'success', 'state': obj.state})
+        except Exception as e:
+            return Response({'status': 'failure', 'error': str(e)})
+        
+    @action(detail=True, methods=['post'])
+    def approve(self, request, pk):
+        workflow = get_object_or_404(IssueWorkflowStageApproval, pk=pk)
+        return self.perform_transition(workflow, workflow.approve)
+    
+    @action(detail=True, methods=['post'])
+    def review(self, request, pk):
+        workflow = get_object_or_404(IssueWorkflowStageApproval, pk=pk)
+        return self.perform_transition(workflow, workflow.review)
+    
+    @action(detail=True, methods=['post'])
+    def reject(self, request, pk):
+        workflow = get_object_or_404(IssueWorkflowStageApproval, pk=pk)
+        return self.perform_transition(workflow, workflow.reject)

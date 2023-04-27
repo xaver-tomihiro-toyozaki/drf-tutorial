@@ -95,6 +95,10 @@ router.register(r'issue/(?P<issue_pk>[^/.]+)/workflow', views.WorkflowViewSet, b
 #     'delete': 'destroy'
 # })
 
+router.register(r'issue-workflows', views.IssueWorkflowViewSet)
+router.register(r'issue-workflow-stages', views.IssueWorkflowStageViewSet)
+router.register(r'issue-workflow-stage-approvals', views.IssueWorkflowStageApprovalViewSet)
+
 urlpatterns = [
     path('', include(router.urls)),
     # path('issue/<int:issue_pk>/workflow/', workflow_list, name='workflow-list'),
