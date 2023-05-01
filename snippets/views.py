@@ -9,6 +9,7 @@ from rest_framework import viewsets
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class IssueViewSet(viewsets.ModelViewSet):
@@ -68,7 +69,7 @@ class IssueWorkflowViewSet(viewsets.ModelViewSet):
 class IssueWorkflowStageViewSet(viewsets.ModelViewSet):
     queryset = IssueWorkflowStage.objects.all()
     serializer_class = IssueWorkflowStageSerializer
-
+    
 
 class IssueWorkflowStageApprovalViewSet(viewsets.ModelViewSet):
     queryset = IssueWorkflowStageApproval.objects.all()
@@ -101,4 +102,7 @@ class IssueWorkflowStageApprovalViewSet(viewsets.ModelViewSet):
     def reject(self, request, pk):
         workflow = get_object_or_404(IssueWorkflowStageApproval, pk=pk)
         return self.perform_transition(workflow, workflow.reject)
+    
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['approver']
 # Workflow Type C (ステージ順の制限をつけれるようにしたもの) ここまで

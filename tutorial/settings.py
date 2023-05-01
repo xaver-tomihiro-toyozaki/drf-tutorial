@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'snippets',
     'django_fsm',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
