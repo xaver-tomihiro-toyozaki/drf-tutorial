@@ -22,13 +22,14 @@ class IssueWorkflowSerializer(serializers.ModelSerializer):
         fields = ['id', 'issue', 'issue_workflow_type']
         
 class IssueWorkflowStageSerializer(serializers.ModelSerializer):
-    approved = serializers.SerializerMethodField()
+    # approved = serializers.SerializerMethodField()
     class Meta:
         model = IssueWorkflowStage
-        fields = ['id', 'issue_workflow', 'issue_workflow_stage_type', 'previous_stage', 'approved']
+        fields = ['id', 'issue_workflow', 'issue_workflow_stage_type', 'previous_stage', 'state']
+        # fields = ['id', 'issue_workflow', 'issue_workflow_stage_type', 'previous_stage', 'state', 'approved']
         
-    def get_approved(self, obj):
-        return obj.is_approved()
+    # def get_approved(self, obj):
+    #     return obj.is_approved()
         
 
 class IssueWorkflowStageApprovalSerializer(serializers.ModelSerializer):

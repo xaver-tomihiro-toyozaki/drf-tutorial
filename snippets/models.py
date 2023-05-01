@@ -79,8 +79,23 @@ class IssueWorkflowStage(models.Model):
     issue_workflow_stage_type = models.CharField(choices=TYPE_CHOICES, default=ALL, max_length=5)
     previous_stage = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     
+    REVIEWING = 'reviewing'
+    APPROVED = 'approved'
+    REJECTED = 'rejected'
+    STATE_CHOICES = [
+        (REVIEWING, 'reviewing'),
+        (APPROVED, 'approved'),
+        (REJECTED, 'rejected')
+    ]
+    state = models.CharField(default=REVIEWING, choices=STATE_CHOICES, max_length=10)
+    
     def needs_all_approvals(self):
         return self.issue_workflow_stage_type == self.ALL
+    
+    def is_state_approved(self):
+        if self.state == self.APPROVED:
+            return True
+        return False
     
     def is_approved(self):
         this_stage_approvals = IssueWorkflowStageApproval.objects.filter(issue_workflow_stage=self)
@@ -144,16 +159,16 @@ class IssueWorkflowStageApproval(models.Model):
             return True
         print('not first stage')
         
-        return previous_stage.is_approved()
+        return previous_stage.is_state_approved()
     
     @transition(field=state, source=REVIEWING, target=APPROVED, conditions=[can_review], permission=can_approve)
     def approve(self):
         pass
-
+    
     @transition(field=state, source=REVIEWING, target=REJECTED, conditions=[can_review], permission=same_approver)
     def reject(self):
         pass
-
+    
     @transition(field=state, source=[APPROVED, REJECTED], target=REVIEWING, permission=same_approver)
     def review(self):
         pass

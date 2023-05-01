@@ -88,20 +88,33 @@ class IssueWorkflowStageApprovalViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({'status': 'failure', 'error': str(e)})
         
+    def update_stage_approval(self, approval):
+        if approval.issue_workflow_stage.is_approved():
+            approval.issue_workflow_stage.state = approval.issue_workflow_stage.APPROVED
+        else:
+            approval.issue_workflow_stage.state = approval.issue_workflow_stage.REVIEWING
+        approval.issue_workflow_stage.save()
+        
     @action(detail=True, methods=['post'])
     def approve(self, request, pk):
-        workflow = get_object_or_404(IssueWorkflowStageApproval, pk=pk)
-        return self.perform_transition(workflow, workflow.approve)
+        approval = get_object_or_404(IssueWorkflowStageApproval, pk=pk)
+        response = self.perform_transition(approval, approval.approve)
+        self.update_stage_approval(approval)
+        return response
     
     @action(detail=True, methods=['post'])
     def review(self, request, pk):
-        workflow = get_object_or_404(IssueWorkflowStageApproval, pk=pk)
-        return self.perform_transition(workflow, workflow.review)
+        approval = get_object_or_404(IssueWorkflowStageApproval, pk=pk)
+        response = self.perform_transition(approval, approval.review)
+        self.update_stage_approval(approval)
+        return response
     
     @action(detail=True, methods=['post'])
     def reject(self, request, pk):
-        workflow = get_object_or_404(IssueWorkflowStageApproval, pk=pk)
-        return self.perform_transition(workflow, workflow.reject)
+        approval = get_object_or_404(IssueWorkflowStageApproval, pk=pk)
+        response = self.perform_transition(approval, approval.reject)
+        self.update_stage_approval(approval)
+        return response
     
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['approver']
