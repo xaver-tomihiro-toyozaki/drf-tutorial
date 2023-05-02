@@ -1,0 +1,1080 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /issue/:
+    get:
+      operationId: listIssues
+      description: ''
+      parameters:
+      - name: author
+        required: false
+        in: query
+        description: author
+        schema:
+          type: string
+      - name: assignee
+        required: false
+        in: query
+        description: assignee
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Issue'
+          description: ''
+      tags:
+      - issue
+    post:
+      operationId: createIssue
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Issue'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Issue'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Issue'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+          description: ''
+      tags:
+      - issue
+  /issue/{id}/:
+    get:
+      operationId: retrieveIssue
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+          description: ''
+      tags:
+      - issue
+    put:
+      operationId: updateIssue
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Issue'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Issue'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Issue'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+          description: ''
+      tags:
+      - issue
+    patch:
+      operationId: partialUpdateIssue
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Issue'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Issue'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Issue'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+          description: ''
+      tags:
+      - issue
+    delete:
+      operationId: destroyIssue
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - issue
+  /issue-thread/:
+    get:
+      operationId: listIssueThreads
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IssueThread'
+          description: ''
+      tags:
+      - issue-thread
+    post:
+      operationId: createIssueThread
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueThread'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueThread'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueThread'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueThread'
+          description: ''
+      tags:
+      - issue-thread
+  /issue-thread/{id}/:
+    get:
+      operationId: retrieveIssueThread
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue thread.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueThread'
+          description: ''
+      tags:
+      - issue-thread
+    put:
+      operationId: updateIssueThread
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue thread.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueThread'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueThread'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueThread'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueThread'
+          description: ''
+      tags:
+      - issue-thread
+    patch:
+      operationId: partialUpdateIssueThread
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue thread.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueThread'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueThread'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueThread'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueThread'
+          description: ''
+      tags:
+      - issue-thread
+    delete:
+      operationId: destroyIssueThread
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue thread.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - issue-thread
+  /issue-comment/:
+    get:
+      operationId: listIssueComments
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IssueComment'
+          description: ''
+      tags:
+      - issue-comment
+    post:
+      operationId: createIssueComment
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueComment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueComment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueComment'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueComment'
+          description: ''
+      tags:
+      - issue-comment
+  /issue-comment/{id}/:
+    get:
+      operationId: retrieveIssueComment
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue comment.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueComment'
+          description: ''
+      tags:
+      - issue-comment
+    put:
+      operationId: updateIssueComment
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue comment.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueComment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueComment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueComment'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueComment'
+          description: ''
+      tags:
+      - issue-comment
+    patch:
+      operationId: partialUpdateIssueComment
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue comment.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueComment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueComment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueComment'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueComment'
+          description: ''
+      tags:
+      - issue-comment
+    delete:
+      operationId: destroyIssueComment
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue comment.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - issue-comment
+  /issue-workflow/:
+    get:
+      operationId: listIssueWorkflows
+      description: ''
+      parameters: 
+        - name: approved
+          required: false
+          in: query
+          description: true or false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IssueWorkflow'
+          description: ''
+      tags:
+      - issue-workflow
+    post:
+      operationId: createIssueWorkflow
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflow'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflow'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflow'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflow'
+          description: ''
+      tags:
+      - issue-workflow
+  /issue-workflow/{id}/:
+    get:
+      operationId: retrieveIssueWorkflow
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflow'
+          description: ''
+      tags:
+      - issue-workflow
+    put:
+      operationId: updateIssueWorkflow
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflow'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflow'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflow'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflow'
+          description: ''
+      tags:
+      - issue-workflow
+    patch:
+      operationId: partialUpdateIssueWorkflow
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflow'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflow'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflow'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflow'
+          description: ''
+      tags:
+      - issue-workflow
+    delete:
+      operationId: destroyIssueWorkflow
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - issue-workflow
+  /issue-workflow-stage/:
+    get:
+      operationId: listIssueWorkflowStages
+      description: ''
+      parameters: 
+        - name: approved
+          required: false
+          in: query
+          description: true or false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IssueWorkflowStage'
+          description: ''
+      tags:
+      - issue-workflow-stage
+    post:
+      operationId: createIssueWorkflowStage
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStage'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflowStage'
+          description: ''
+      tags:
+      - issue-workflow-stage
+  /issue-workflow-stage/{id}/:
+    get:
+      operationId: retrieveIssueWorkflowStage
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow stage.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflowStage'
+          description: ''
+      tags:
+      - issue-workflow-stage
+    put:
+      operationId: updateIssueWorkflowStage
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow stage.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStage'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflowStage'
+          description: ''
+      tags:
+      - issue-workflow-stage
+    patch:
+      operationId: partialUpdateIssueWorkflowStage
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow stage.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStage'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflowStage'
+          description: ''
+      tags:
+      - issue-workflow-stage
+    delete:
+      operationId: destroyIssueWorkflowStage
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow stage.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - issue-workflow-stage
+  /issue-workflow-stage-approval/:
+    get:
+      operationId: listIssueWorkflowStageApprovals
+      description: ''
+      parameters:
+      - name: approver
+        required: false
+        in: query
+        description: approver
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          description: ''
+      tags:
+      - issue-workflow-stage-approval
+    post:
+      operationId: createIssueWorkflowStageApproval
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          description: ''
+      tags:
+      - issue-workflow-stage-approval
+  /issue-workflow-stage-approval/{id}/:
+    get:
+      operationId: retrieveIssueWorkflowStageApproval
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow stage
+          approval.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          description: ''
+      tags:
+      - issue-workflow-stage-approval
+    put:
+      operationId: updateIssueWorkflowStageApproval
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow stage
+          approval.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          description: ''
+      tags:
+      - issue-workflow-stage-approval
+    patch:
+      operationId: partialUpdateIssueWorkflowStageApproval
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow stage
+          approval.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          description: ''
+      tags:
+      - issue-workflow-stage-approval
+    delete:
+      operationId: destroyIssueWorkflowStageApproval
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow stage
+          approval.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - issue-workflow-stage-approval
+  /issue-workflow-stage-approval/{id}/approve/:
+    post:
+      operationId: approveIssueWorkflowStageApproval
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow stage
+          approval.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          description: ''
+      tags:
+      - issue-workflow-stage-approval
+  /issue-workflow-stage-approval/{id}/reject/:
+    post:
+      operationId: rejectIssueWorkflowStageApproval
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow stage
+          approval.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          description: ''
+      tags:
+      - issue-workflow-stage-approval
+  /issue-workflow-stage-approval/{id}/review/:
+    post:
+      operationId: reviewIssueWorkflowStageApproval
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this issue workflow stage
+          approval.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IssueWorkflowStageApproval'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueWorkflowStageApproval'
+          description: ''
+      tags:
+      - issue-workflow-stage-approval
+components:
+  schemas:
+    Issue:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+        key:
+          type: string
+          nullable: true
+          maxLength: 255
+        json:
+          type: string
+          nullable: true
+        author:
+          type: integer
+          readOnly: true
+        assignee:
+          type: integer
+      required:
+      - title
+      - content
+      - assignee
+    IssueThread:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        issue:
+          type: integer
+        title:
+          type: string
+          maxLength: 50
+        resoleved:
+          type: boolean
+        user:
+          type: integer
+          readOnly: true
+      required:
+      - issue
+      - title
+    IssueComment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        issue_thread:
+          type: integer
+        content:
+          type: string
+        user:
+          type: integer
+          readOnly: true
+      required:
+      - issue_thread
+      - content
+    IssueWorkflow:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        issue:
+          type: integer
+        issue_workflow_type:
+          enum:
+          - strict
+          - open
+          type: string
+        approved:
+          type: string
+          readOnly: true
+      required:
+      - issue
+    IssueWorkflowStage:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        issue_workflow:
+          type: integer
+        issue_workflow_stage_type:
+          enum:
+          - all
+          - one
+          type: string
+        previous_stage:
+          type: integer
+          nullable: true
+        approved:
+          type: string
+          readOnly: true
+      required:
+      - issue_workflow
+    IssueWorkflowStageApproval:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        issue_workflow_stage:
+          type: integer
+        approver:
+          type: integer
+        state:
+          type: string
+          readOnly: true
+        comment:
+          type: string
+          nullable: true
+          readOnly: true
+        approved_at:
+          type: string
+          readOnly: true
+      required:
+      - issue_workflow_stage
+      - approver

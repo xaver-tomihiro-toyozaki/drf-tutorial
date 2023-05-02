@@ -7,7 +7,10 @@ from snippets import views
 router = DefaultRouter()
 
 router.register(r'issue', views.IssueViewSet, basename='issue')
-router.register(r'issue/(?P<issue_pk>[^/.]+)/workflow', views.WorkflowViewSet, basename='workflow')
+router.register(r'issue-thread', views.IssueThreadViewSet)
+router.register(r'issue-comment', views.IssueCommentViewSet)
+
+# router.register(r'issue/(?P<issue_pk>[^/.]+)/workflow', views.WorkflowViewSet, basename='workflow')
 
 # workflow_list = views.WorkflowViewSet.as_view({
 #     'get': 'list',
@@ -19,9 +22,9 @@ router.register(r'issue/(?P<issue_pk>[^/.]+)/workflow', views.WorkflowViewSet, b
 #     'delete': 'destroy'
 # })
 
-router.register(r'issue-workflows', views.IssueWorkflowViewSet)
-router.register(r'issue-workflow-stages', views.IssueWorkflowStageViewSet)
-router.register(r'issue-workflow-stage-approvals', views.IssueWorkflowStageApprovalViewSet)
+router.register(r'issue-workflow', views.IssueWorkflowViewSet)
+router.register(r'issue-workflow-stage', views.IssueWorkflowStageViewSet)
+router.register(r'issue-workflow-stage-approval', views.IssueWorkflowStageApprovalViewSet)
 
 urlpatterns = [
     path('', include(router.urls))

@@ -1,14 +1,26 @@
 from rest_framework import serializers
-from snippets.models import Issue, IssueWorkflow, IssueWorkflowStage, IssueWorkflowStageApproval, Workflow
+from snippets.models import Issue, IssueComment, IssueThread, IssueWorkflow, IssueWorkflowStage, IssueWorkflowStageApproval, Workflow
 
-
-# Issue Type B
-class IssueSerializer(serializers.HyperlinkedModelSerializer):
-    issuer = serializers.ReadOnlyField(source='issuer.username')
+# Issue機能
+class IssueSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source='author.id')
     class Meta:
         model = Issue
-        fields = ['url', 'id', 'title', 'issuer']
+        fields = ['id', 'title', 'content', 'key', 'json', 'author', 'assignee']
+        
+class IssueThreadSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.id')
+    class Meta:
+        model = IssueThread
+        fields = ['id', 'issue', 'title', 'resoleved', 'user']
+        
+class IssueCommentSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.id')
+    class Meta:
+        model = IssueComment
+        fields = ['id', 'issue_thread', 'content', 'user']
 
+# Issue Type B
 class WorkflowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workflow
@@ -17,9 +29,13 @@ class WorkflowSerializer(serializers.ModelSerializer):
 
 # Workflow Type C (ステージ順の制限をつけれるようにしたもの)
 class IssueWorkflowSerializer(serializers.ModelSerializer):
+    approved = serializers.SerializerMethodField()
     class Meta:
         model = IssueWorkflow
-        fields = ['id', 'issue', 'issue_workflow_type']
+        fields = ['id', 'issue', 'issue_workflow_type', 'approved']
+        
+    def get_approved(self, obj):
+        return obj.is_approved()
         
 class IssueWorkflowStageSerializer(serializers.ModelSerializer):
     approved = serializers.SerializerMethodField()

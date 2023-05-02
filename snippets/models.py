@@ -1,16 +1,35 @@
 from django.db import models
 from django_fsm import FSMField, transition
 
-# Issue Type B (順番関係ないもの)
+# 基本のIssue機能
 class Issue(models.Model):
     title = models.CharField(max_length=255)
-    issuer = models.ForeignKey('auth.User', related_name="issuer", on_delete=models.CASCADE)
+    content = models.TextField()
+    key = models.CharField(max_length=255, null=True)
+    json = models.TextField(null=True)
+    author = models.ForeignKey('auth.User', related_name="issue_author", on_delete=models.CASCADE)
+    assignee = models.ForeignKey('auth.User', related_name="issue_assignee", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
-class IssueComment():
+# その他Issueの機能
+class IssueThread(models.Model):
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
-    comment = models.TextField()
+    title = models.CharField(max_length=50)
+    resoleved = models.BooleanField(default=False)
+    user = models.ForeignKey('auth.User', related_name='issue_thread_user', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+class IssueComment(models.Model):
+    issue_thread = models.ForeignKey(IssueThread, on_delete=models.CASCADE)
+    content = models.TextField()
+    user = models.ForeignKey('auth.User', related_name='issue_thread_comment_user', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
 
+# Issue Type B (順番関係ないもの)
 class Workflow(models.Model):
     REVIEWING = 'reviewing'
     APPROVED = 'approved'
@@ -67,6 +86,14 @@ class IssueWorkflow(models.Model):
         print('issue workflow id: ', self)
         print('issue_workflow_type:', self.issue_workflow_type)
         return self.issue_workflow_type == self.STRICT
+    
+    def is_approved(self):
+        this_wf_stages = IssueWorkflowStage.objects.filter(issue_workflow=self)
+        unreferenced_set = set(this_wf_stages.values_list('id', flat=True)) - set(this_wf_stages.values_list('previous_stage', flat=True))
+        last_stage = this_wf_stages.filter(id__in=unreferenced_set)
+        if len(last_stage) < 1:
+            return False
+        return last_stage[0].is_approved()
     
 class IssueWorkflowStage(models.Model):
     issue_workflow = models.ForeignKey(IssueWorkflow, on_delete=models.CASCADE)
